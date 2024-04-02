@@ -7,20 +7,20 @@ class WeatherGui:
     def __init__(self, api_key):
         self.api_key = api_key
    
-        self.app_width            = 400
-        self.app_height           = 200
-        self.row                  = 0
-        self.icons                = []
-        self.weather_window       = None
-        self.ligthblue            = "#9ea0ea"
-        self.ligtgray             = "#d3d3d3"
-        self.weather_window_count = 0
+        self.app_width             = 400
+        self.app_height            = 200
+        self.row                   = 0
+        self.icons                 = []
+        self.weather_window        = None
+        self.ligth_blue            = "#9ea0ea"
+        self.ligth_gray            = "#d3d3d3"
+        self.weather_window_count  = 0
 
         self.createGui()
 
     def createGui(self):
         self.root = tk.Tk()
-        self.root.configure(background=self.ligthblue, highlightcolor=self.ligthblue)
+        self.root.configure(background=self.ligth_blue, highlightcolor=self.ligth_blue)
         self.screen_width = self.root.winfo_screenwidth()
         self.screen_height = self.root.winfo_screenheight()
 
@@ -29,7 +29,7 @@ class WeatherGui:
         self.root.geometry(f"{self.app_width}x{self.app_height}+{self.screen_width-self.app_width}+{self.screen_height-self.app_height}")
 
         s = ttk.Style()
-        s.configure("TFrame", background=self.ligthblue)
+        s.configure("TFrame", background=self.ligth_blue)
         s.configure("TButton", background="white", font=("Helvetica",9), relief="sunken")
 
         self.srcoll_frame = ttk.Frame(self.root, padding=10, style="TFrame")
@@ -40,7 +40,7 @@ class WeatherGui:
 
         self.loadCities()
    
-        ttk.Label(self.frm, text="Country/City", background=self.ligthblue).grid(column=0, row=self.row, padx=(0,5))
+        ttk.Label(self.frm, text="Country/City", background=self.ligth_blue).grid(column=0, row=self.row, padx=(0,5))
 
         self.city_entry = ttk.Entry(self.frm)
         self.city_entry.insert(0, "PT/Braga")
@@ -56,7 +56,7 @@ class WeatherGui:
 
     def loadCities(self):
         text = tk.Text(self.srcoll_frame, width=20, height=8)
-        text.configure(cursor="arrow", background=self.ligtgray)
+        text.configure(cursor="arrow", background=self.ligth_gray)
         text.grid(row=0, column=0)
 
         sb = tk.Scrollbar(self.srcoll_frame, command=text.yview)
@@ -64,7 +64,7 @@ class WeatherGui:
 
         text.configure(yscrollcommand=sb.set)
 
-        ttk.Label(self.srcoll_frame, text="Weather\nApp", background=self.ligthblue, font="20pt", anchor="center").grid(column=2, row=0, padx=(20,20))
+        ttk.Label(self.srcoll_frame, text="Weather\nApp", background=self.ligth_blue, font="20pt", anchor="center").grid(column=2, row=0, padx=(20,20))
 
         if os.path.exists("cities.txt"):
             with open("cities.txt", "r") as file:
@@ -101,18 +101,18 @@ class WeatherGui:
             self.weather_window.destroy()
 
         s = ttk.Style()
-        s.configure("TFrame", background=self.ligthblue)
-        s.configure("TLabel", background=self.ligthblue)
+        s.configure("TFrame", background=self.ligth_blue)
+        s.configure("TLabel", background=self.ligth_blue)
 
         self.weather_window = tk.Toplevel(self.root)
         self.weather_window.title(f"Weather Information - {city}")
-        self.weather_window.configure(background=self.ligthblue)
+        self.weather_window.configure(background=self.ligth_blue)
 
         weather_window_width = 400
-        weather_window_height = 100
+        weather_window_height = 50
         self.weather_window.geometry(f"{weather_window_width}x{weather_window_height}"+
                                 f"+{self.screen_width-weather_window_width}"+
-                                f"+{self.screen_height-3*weather_window_height}")
+                                f"+{self.screen_height-weather_window_height-200}")
 
         weather_frame = ttk.Frame(self.weather_window, padding=10)
         weather_frame.grid()
@@ -121,7 +121,7 @@ class WeatherGui:
 
         weather_now_btn = ttk.Button(weather_frame, text="Weather Now", command=lambda w=weather, c=city: self.getWeatherNow(w, c))
         weather_now_btn.grid(column=0, row=1)
-        weather_future_btn = ttk.Button(weather_frame, text="Weather Forecast", command=self.weather_window.destroy)
+        weather_future_btn = ttk.Button(weather_frame, text="Weather Forecast", command=lambda w=weather, c=city: self.getWeatherFor5Days(w, c))
         weather_future_btn.grid(column=1, row=1)
 
 
@@ -132,23 +132,23 @@ class WeatherGui:
 
         weather_window = tk.Toplevel(self.root)
         weather_window.title(f"Weather Information - {city}")
-        weather_window.configure(background=self.ligthblue)
+        weather_window.configure(background=self.ligth_blue)
 
         weather_window_width = 400
         weather_window_height = 300
         weather_window.geometry(f"{weather_window_width}x{weather_window_height}"+
                                 f"+{self.screen_width-weather_window_width - self.weather_window_count}"+
-                                f"+{self.screen_height-weather_window_height-300}")
+                                f"+{self.screen_height-weather_window_height-250}")
 
         weather_frame = ttk.Frame(weather_window, padding=10)
         weather_frame.grid()
         self.weather_window_count += weather_window_width
 
+        print(self.weather_window_count)
         s = ttk.Style()
-        s.configure("TFrame", background=self.ligthblue)
-        s.configure("TLabel", background=self.ligthblue)
+        s.configure("TFrame", background=self.ligth_blue)
+        s.configure("TLabel", background=self.ligth_blue)
 
-        print(weather.temperatures)
 
         weather_info = weather.temperatures[0] if len(weather.temperatures)>0 else None
 
@@ -225,6 +225,147 @@ class WeatherGui:
                     command=lambda w=weather_window, width=weather_window_width: self.destroyWeeatherWindow(w,width)).grid(column=3, 
                                                                                                                             row=100)
 
+    def getWeatherFor5Days(self, weather, city):
+        weather.getWeather5Days()
+
+        weather_window = tk.Toplevel(self.root)
+        weather_window.title(f"Weather Information - {city}")
+        weather_window.configure(background=self.ligth_blue)
+
+        weather_window_width  = 400
+        weather_window_height = 80
+        weather_window.geometry(f"{weather_window_width}x{weather_window_height}"+
+                                f"+{self.screen_width-weather_window_width }"+
+                                f"+{self.screen_height-weather_window_height-250}")
+
+        days = {}
+        for day in weather.temperatures:
+            date = day["date"].date()
+            days[date] = {}
+
+        for i in range(len(weather.temperatures)):
+            day = weather.temperatures[i]
+            date = day["date"].date()
+
+            hour = day["date"].time()
+            days[date][hour] = {}
+
+            days[date][hour] = {
+                "min_temperature": day["min_temperature"],
+                "max_temperature": day["max_temperature"],
+                "humidity": day["humidity"],
+                "weather": day["weather"],
+                "weather_description": day["weather_description"],
+                "weather_icon": day["weather_icon"],
+                "clouds": day["clouds"],
+                "wind_speed": day["wind_speed"],
+                "wind_deg": day["wind_deg"],
+            }
+
+
+        srcoll_frame= ttk.Frame(weather_window, padding=10, style="TFrame")
+        srcoll_frame.grid()
+
+        text = tk.Text(srcoll_frame, width=20, height=4)
+        text.configure(cursor="arrow", background=self.ligth_gray)
+        text.grid(row=0, column=1)
+
+        sb = tk.Scrollbar(srcoll_frame, command=text.yview)
+        sb.grid(row=0, column=2, sticky="nse")
+
+        text.configure(yscrollcommand=sb.set)
+
+        ttk.Label(srcoll_frame, text="Select a Day", background=self.ligth_blue, font="20pt", anchor="center").grid(column=0, row=0, padx=(20,20))
+
+        for day in days:
+            # weatherOneDay(self, day, date, city):
+            button = tk.Button(text, text=f"{day}", command=lambda d=days[day], da=day, c=city: self.weatherOneDay(d,da,city), background="white")
+            text.window_create("end", window=button)
+            text.insert("end", "\n")
+ 
+        text.configure(state="disabled")
+
+        ttk.Button(srcoll_frame, text="Close", command=weather_window.destroy).grid(column=3, row=0, padx=(10,0))
+
+    def weatherOneDay(self, day, date, city):
+        s = ttk.Style()
+        s.configure("TFrame", background=self.ligth_blue)
+        s.configure("TLabel", background=self.ligth_blue)
+
+        weather_window = tk.Toplevel(self.root)
+        weather_window.title(f"Weather Information - {city}")
+        weather_window.configure(background=self.ligth_blue)
+
+
+        weather_window_width = 1800
+        weather_window_height = 350
+        weather_window.geometry(f"{weather_window_width}x{weather_window_height}"+
+                                f"+{self.screen_width-weather_window_width}"+
+                                f"+{self.screen_height-weather_window_height-330}")
+
+        if not day:
+            ttk.Label(weather_window, text=f"{city} Not Found", font=("Helvetica", 20)).grid(row=0, column=0)
+            ttk.Button(weather_window, 
+                       text="Close", 
+                       command=weather_window.destroy).grid(row=100, column=100)
+            return
+
+        ttk.Label(weather_window, text=city, font=("Helvetica", 12)).grid(row=0, column=0)
+        
+        column_index = 0
+        row_index=1
+        for hour, info in day.items():
+            frame = ttk.Frame(weather_window, padding=10)
+            frame.grid(row=row_index, column=column_index, pady=10, padx=10, sticky="nsew")
+
+            max_temperature = info["max_temperature"]
+            min_temperature = info["min_temperature"]
+            humidity = info["humidity"]
+            weather_type = info["weather"]
+            weather_description = info["weather_description"].capitalize()
+            weather_icon = info["weather_icon"]
+            clouds = info["clouds"]
+            wind_speed = info["wind_speed"]
+            wind_deg = info["wind_deg"]
+
+            icon_path = "icons/" + weather_icon
+            self.icons += [PhotoImage(file=icon_path)]
+
+            ttk.Label(frame, image=self.icons[-1]).grid(column=0, row=0, rowspan=8, padx=10)
+
+            ttk.Label(frame, text="Date").grid(column=1, row=0)
+            ttk.Label(frame, text=date).grid(column=2, row=0)
+
+            ttk.Label(frame, text="Hour").grid(column=1, row=1)
+            ttk.Label(frame, text=hour).grid(column=2, row=1)
+
+            ttk.Label(frame, text="Max Temperature").grid(column=1, row=2)
+            ttk.Label(frame, text=f"{max_temperature} \N{DEGREE SIGN}C").grid(column=2, row=2)
+
+            ttk.Label(frame, text="Min Temperature").grid(column=1, row=3)
+            ttk.Label(frame, text=f"{min_temperature} \N{DEGREE SIGN}C").grid(column=2, row=3)
+
+            ttk.Label(frame, text="Humidity").grid(column=1, row=4)
+            ttk.Label(frame, text=f"{humidity}%").grid(column=2, row=4)
+
+            ttk.Label(frame, text="Weather").grid(column=1, row=5)
+            ttk.Label(frame, text=f"{weather_type}: {weather_description}").grid(column=2, row=5)
+
+            ttk.Label(frame, text="Cloudiness").grid(column=1, row=6)
+            ttk.Label(frame, text=f"{clouds}%").grid(column=2, row=6)
+
+            ttk.Label(frame, text="Wind").grid(column=1, row=7)
+            ttk.Label(frame, text=f"Speed: {wind_speed}m/s, Direction: {wind_deg}\N{DEGREE SIGN}").grid(column=2, row=7)
+
+            column_index+=1
+            if column_index == 4:
+                column_index=0
+                row_index+=1
+
+        ttk.Button(frame, 
+                   text="Close", 
+                   command=weather_window.destroy).grid(column=2, row=8)
+
     def destroyWeeatherWindow(self, weather_window, window_width):
         weather_window.destroy()
         self.weather_window_count -= window_width
@@ -232,12 +373,3 @@ class WeatherGui:
     def restartGui(self):
         self.root.destroy()
         self.createGui()
-
-def main():
-    with open("api.key", "r") as file:
-        api_key = file.read()
-        
-    WeatherGui(api_key)
-
-if __name__ == "__main__":
-    main()
