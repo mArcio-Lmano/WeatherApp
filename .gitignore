@@ -1,2 +1,5 @@
 cities.txt
 privateInfo.txt
+.venv/
+src/__pycache__
+*.key
