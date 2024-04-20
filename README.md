@@ -44,9 +44,10 @@ This is a simple weather application that retrieves weather information for a gi
 
 ## Usage
 
-Run the main.py script to start the application (inside the ```src/``` file:
+Run the main.py script to start the application:
 
 ```bash
+cd src/
 python main.py
 ```
 
