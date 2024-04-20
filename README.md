@@ -9,7 +9,7 @@ This is a simple weather application that retrieves weather information for a gi
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/your_username/weather-app.git
+    git clone https://github.com/mArcio-Lmano/weather-app.git
     ```
 
 2. Navigate to the project directory:
@@ -44,7 +44,7 @@ This is a simple weather application that retrieves weather information for a gi
 
 ## Usage
 
-Run the main.py script to start the application:
+Run the main.py script to start the application (inside the ```src/``` file:
 
 ```bash
 python main.py
